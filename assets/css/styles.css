@@ -48,7 +48,7 @@ header a.button {
     text-decoration: none;
     display: inline-block;
     border-radius: 8px;       
-    margin: 0 5px 0 5px; 
+    margin: 5px; 
     font-size: 0.8em;
 }
 header a.button:hover {
@@ -97,7 +97,7 @@ section#method img {
 
 
 section#additional img {
-    padding: 5px;
+    padding: 0px;
 }
 
 
