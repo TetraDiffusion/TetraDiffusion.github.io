@@ -1,0 +1,458 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <title>TetraDiffusion</title>
+    <meta name="description" content="Tetrahedral Diffusion Models for 3D Shape Generation" />
+    
+    <meta property="og:title" content="TetraDiffusion" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.tetradiffusion.github.io" />
+    <meta property="og:description" content="Tetrahedral Diffusion Models for 3D Shape Generation" />
+    <meta property="og:image" content="assets/images/content.png" />
+    
+    <link rel="icon" href="assets/images/favicon.ico" />
+    
+    <link rel="stylesheet" href="assets/css/styles.css?v=0.2" />       
+    <link rel="stylesheet" type="text/css" href="assets/css/slick.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/slick-theme.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200&family=Roboto:wght@300&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.4/css/academicons.min.css" />
+    <link rel="stylesheet" href="assets/css/magnify.css" />
+
+
+    <script src="https://kit.fontawesome.com/f49eb91832.js" crossorigin="anonymous"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script> 
+    
+</head>
+
+<body>
+    <header>
+        <h1>TetraDiffusion: Tetrahedral Diffusion Models<br /> for 3D Shape Generation</h1>
+        <div id="authors">
+            <div>
+                <img src="assets/images/nikolai.png" alt="Nikolai" />
+                <br />
+                Nikolai Kalischek <sup>*,1</sup>
+            </div>
+            <div>
+                <img src="assets/images/torben.png" alt="Nikolai" />
+                <br />
+                Torben Peters <sup>*,1</sup>
+            </div>
+            <div>
+                <img src="assets/images/jan.png" alt="Nikolai" />
+                <br />
+                Jan Dirk Wegner <sup>2</sup>
+            </div>
+            <div>
+                <img src="assets/images/konrad.png" alt="Nikolai" />
+                <br />
+                Konrad Schindler <sup>1</sup>
+            </div> 
+        </div>     
+        <p style="text-align: center;text-align-last: center;">
+            <sup>1</sup> ETH Z&uuml;rich <sup>2</sup> University of Z&uuml;rich <br />
+            <sup>*</sup> equal contribution
+            <br />
+            <br />
+        </p>
+        <div>
+            <a class="button" target="_blank" href="assets/paper/main.pdf">
+                <i class="far fa-file-pdf fa-bounce-hover fa-lg"></i>&nbsp; Paper
+            </a>
+            <a class="button" target="_blank" href="assets/paper/supp.pdf">
+                <i class="far fa-file-pdf fa-bounce-hover fa-lg"></i>&nbsp; Supplementary
+            </a>
+            <a class="button" target="_blank" href="https://arxiv.org/abs/2211.13220">                     
+                <i class="ai ai-arxiv ai-lg fa-bounce-hover"></i>&nbsp; Arxiv
+            </a>
+            <a class="button" target="_blank" href="https://github.com/PeterTor/TetraDiffusion">
+                <i class="fa-brands fa-github fa-bounce-hover fa-lg"></i>&nbsp; Code
+            </a>
+        </div>
+    </header>
+    <section id="videos">
+        <video autoplay muted playsinline>
+            <source src="assets/videos/bike.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+	<div style="width: 0.5vw;"></div>
+        <video autoplay muted playsinline style="margin-top: -1.1%;">
+            <source src="assets/videos/plane.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+	<div style="width: 1vw;"></div>
+        <video autoplay muted playsinline style="margin-top: -1.1%;">
+            <source src="assets/videos/car.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+	<div style="width: 0.5vw;"></div>
+        <video autoplay muted playsinline>
+            <source src="assets/videos/chair.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section>
+    <section style="display:flex; justify-content:center;">
+        <h1 style="font-size: 3rem; margin-bottom: -0.4rem;">tl;dr</h1>
+    </section>
+    <section id="intro">
+        <div>
+            <video controls autoplay muted loop playsinline>
+                <source src="assets/videos/HighResTrailer.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video> 
+        </div>
+        <div class="vertical-aligned">
+        <p style="text-align: justify;"> <i>TetraDiffusion</i> operates on a tetrahedral partitioning of 3D space to enable efficient, high-resolution 3D shape generation.  Our model introduces operators for convolution and transpose convolution that act directly on the tetrahedral partition, and seamlessly includes additional attributes such as color.
+        It enables rapid sampling of detailed 3D objects in nearly real-time with unprecedented resolution, works on standard consumer hardware, and delivers superior results.</p>
+        </div>    
+    </section>
+    
+    <section class="wrapper" style="max-width: 1500px !important;">
+        <div id="objs"> 
+            <div>
+                <model-viewer alt="test" src="assets/objs/airplanes/0.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>  
+            <div>
+                <model-viewer alt="test" src="assets/objs/cars/2.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/bikes/3.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/airplanes/2.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+	    <div>
+                <model-viewer alt="test" src="assets/objs/cars/7.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/bikes/1.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/airplanes/3.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/cars/10.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/bikes/2.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/airplanes/4.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/cars/11.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/bikes/0.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/airplanes/8.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/cars/13.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/bikes/4.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/airplanes/14.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/cars/19.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/bikes/5.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/airplanes/18.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/cars/25.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+            <div>
+                <model-viewer alt="test" src="assets/objs/airplanes/20.glb" shadow-intensity="3" camera-controls touch-action="pan-y" camera-orbit="135deg 75deg 105%">
+                    <effect-composer render-mode="quality" msaa="8">
+                        <color-grade-effect blend-mode="DEFAULT" opacity="1" tonemapping="REINHARD2" brightness="0.3" contrast="0.4" saturation="0.5" hue="0"></color-grade-effect>
+                    </effect-composer>
+                </model-viewer>
+            </div>
+        </div>
+        <p style="text-align:center;font-size:0.8rem;text-align-last:center;">All meshes are shown without any postprocessing, hole-filling or smoothing. Airplanes, bikes and cars are from our high resolution model, chairs from our standard model.</p>
+    </section>
+    
+    <section id="abstract" class="wrapper" style="margin-top: 2rem;">
+        <h1>Abstract</h1>
+        <p style="text-align: justify;">
+            Probabilistic denoising diffusion models (DDMs) have set a new standard for 2D image generation. Extending DDMs for 3D content creation is an active field of research. Here, we propose <i>TetraDiffusion</i>, a diffusion model that operates on a tetrahedral partitioning of 3D space to enable efficient, high-resolution 3D shape generation. Our model introduces operators for convolution and transpose convolution that act directly on the tetrahedral partition, and seamlessly includes additional attributes such as color. 
+            Remarkably, <i>TetraDiffusion</i> enables rapid sampling of detailed 3D objects in nearly real-time with unprecedented resolution. It's also adaptable for generating 3D shapes conditioned on 2D images. Compared to existing 3D mesh diffusion techniques, our method is up to 200 times faster in inference speed, works on standard consumer hardware, and delivers superior results.
+        </p>
+    </section>
+    
+    
+    <section id="method" class="wrapper" style="margin-top: 2rem;">
+        <h1>Method</h1>
+        <p>
+            <img src="assets/images/method.png" alt="Our tetrahedral convolution." />
+            The project introduces a novel approach to 3D convolution called "Tetra Convolution", designed to work with displacement and signed distance fields in a tetrahedral grid. Unlike regular 3D convolutions that struggle with varying neighborhoods and connectivity, Tetra Convolution uses the tetrahedral A15 lattice structure for collision-free spatial ordering of vertices. This unique method outperforms traditional graph convolutions and eliminates the need for searching points under the kernel as in KPConv. It employs a discrete binning process for local edge orientations to achieve efficient collision-free ordering, resulting in a significantly smaller basis of reference directions compared to 3D voxel convolutions (16 vs 27). The TetraConv layer computes a weighted sum over each vertex and its neighborhood, accounting for varying neighborhood sizes with zero padding. This structure enables flexible down- and upsampling on the tetrahedral grid, essential for convolutional learning. Additionally, the project introduces "Grid Pruning", a technique to efficiently prune the tetrahedral grid, which is typically sparsely populated. This method allows for targeted deletion of unused vertices and connections, leading to optimized memory and speed for training and inference.
+        </p>
+        <p>    
+            <img src="assets/images/trajectory.png" alt="Trajectory of the diffusion process." />
+            <br />
+            Finally, the project presents <i>TetraDiffusion</i>, a process for diffusing features like deformation vectors and color directly in the tetrahedral space. The network integrates standard diffusion model architecture with tetrahedral convolution operators, group normalization, SiLU activations, and attention layers. This approach promises more efficient and effective processing of 3D data, especially in applications involving complex spatial relationships.
+        </p>
+        <table style="margin-left:auto;margin-right:auto;width:100%;text-align:center;border-collapse: collapse;border-top: 2px solid #000;line-height: 1.5rem;">  
+            <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 16%;">
+                <col style="width: 16%;">
+                <col style="width: 16%;">
+                <col style="width: 16%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th colspan="2" style="text-align:center;border-bottom: 1px solid #000;">Training</th>
+                    <th colspan="2" style="text-align:center;border-bottom: 1px solid #000;">Inference</th>
+                </tr>
+                <tr>
+                    <th style="text-align:left;border-bottom: 1px solid #000;">Method</th>
+                    <th style="border-bottom: 1px solid #000;">GPU (GB)</th>
+                    <th style="border-bottom: 1px solid #000;">Speed (it/s)</th>
+                    <th style="border-bottom: 1px solid #000;">GPU (GB)</th>
+                    <th style="border-bottom: 1px solid #000;">Speed (s/shape)</th>
+                </tr>
+            </thead>      
+            <tbody>
+                <tr>
+                    <td style="text-align:left;">GET3D [<a href="#references">1</a>]</td>
+                    <td>13.3</td>
+                    <td>0.10</td>
+                    <td>11.3</td>
+                    <td>0.83</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left;">MeshDiffusion [<a href="#references">2</a>]</td>
+                    <td>76.6</td>
+                    <td>0.5</td>
+                    <td>29.2 (22.6<sup>&dagger;</sup>)</td>
+                    <td>714.3 (526.3<sup>&dagger;</sup>)</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left;">Ours*</td>
+                    <td>12.0</td>
+                    <td>2.8</td>
+                    <td>7.4</td>
+                    <td>3.4</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left;">Ours</td>
+                    <td>20.8</td>
+                    <td>1.0</td>
+                    <td>9.7</td>
+                    <td>11.2</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left;">Ours<sub>hr</sub>*</td>
+                    <td>20.9</td>
+                    <td>1.2</td>
+                    <td>11.7</td>
+                    <td>9.1</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left;">Ours<sub>hr</sub></td>
+                    <td>78.2</td>
+                    <td>0.3</td>
+                    <td>42.1</td>
+                    <td>33.3</td>
+                </tr>
+            </tbody>     
+            <tfoot>
+                <tr>
+                    <td colspan="5" style="border-top: 2px solid #000;text-align:left;">
+                        Memory consumption and computing time of different generative shape models.
+                        <sup>&dagger;</sup> We implement 16-bit inference in MD for fair comparison.
+                        Our methods labelled with a * are pruned versions, highlighting the efficiency boost of our tetrahedral formulation.
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </section>
+    
+    <section id="additional" class="wrapper" style="margin-top: 2rem;">
+        <h1>Additional qualitative results</h1>
+        <h2>Interpolations</h2>
+        <p>
+            We can directly interpolate between two different shape instances using spherical interpolation to blend from start to end noise.
+        </p>
+        <div> 
+            <img src="assets/images/interpolations.png" width="100%" />    
+        </div>
+        <h2>Zoom-ins</h2>
+        <p>
+        Our efficient architecture is capable of generating meshes in unprecedented resolution, capturing intricate details such as chains, fine rims, brake disks and brake handles. Importantly, these details are represented in the geometry of the mesh and not in texture maps. Diffusing per vertex texture information enforces the strong geometry.
+        </p>
+        <p>Hover over the images to enable magnifying glass or tap the image on mobile.</p>
+        <div style="display:flex; flex-wrap: wrap; justify-content:center;">
+            <img src="assets/images/zoomins/1.png" width="100%" class="zoom" data-magnify-src="assets/images/zoomins/1.png" />
+            <img src="assets/images/zoomins/0.png" width="100%" class="zoom" data-magnify-src="assets/images/zoomins/0.png" />
+            <img src="assets/images/zoomins/4.png" width="100%" class="zoom" data-magnify-src="assets/images/zoomins/4.png" />
+            <img src="assets/images/zoomins/3.png" width="100%" class="zoom" data-magnify-src="assets/images/zoomins/3.png" />
+            <img src="assets/images/zoomins/2.png" width="100%" class="zoom" data-magnify-src="assets/images/zoomins/2.png" />
+            <img src="assets/images/zoomins/5.png" width="100%" class="zoom" data-magnify-src="assets/images/zoomins/5.png" />
+        </div>
+        
+        <h2>Inner structures</h2>
+        <p> Our models are able to generate consistent inner structure, e.g. seats, steering wheels or engines.</p>
+        <div style="display:flex; flex-wrap: wrap; justify-content:center;">
+            <img src="assets/images/inner/0.png" width="23%" />
+            <img src="assets/images/inner/1.png" width="23%" />
+            <img src="assets/images/inner/2.png" width="23%" />
+            <img src="assets/images/inner/3.png" width="23%" />        
+        </div>
+    </section>
+    
+    <section id="references" class="wrapper" style="margin-top: 2rem;">
+    <h1>References</h1>
+    <p>
+    [1] Gao, Jun, et al. "Get3d: A generative model of high quality 3d textured shapes learned from images." Advances In Neural Information Processing Systems 35 (2022): 31841-31854.
+    <br />
+    [2] Liu, Zhen, et al. "MeshDiffusion: Score-based Generative 3D Mesh Modeling." The Eleventh International Conference on Learning Representations. 2022.
+    </p>
+    </section>
+    
+    <section id="citation" class="wrapper" style="margin-top: 2rem;">
+        <h1>Cite</h1>
+        <pre style="text-align: left;background:#F2F2F2;padding:1rem;"><code>@article{kalischek2023tetradiffusion,
+  title={TetraDiffusion: Tetrahedral Diffusion Models for 3D Shape Generation},
+  author={Kalischek, Nikolai and Peters, Torben and Wegner, Jan D and Schindler, Konrad},
+  journal={arXiv preprint arXiv:XXXXXXX},
+  year={2023}
+}
+</code></pre>               
+    </section>
+    
+    <footer>
+        <p>Copyright &copy; 2023 tetradiffusion.github.io. All rights reserved.</p>
+    </footer>
+    
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer-module.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer-effects/dist/model-viewer-effects.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnify/2.3.3/js/jquery.magnify.min.js" integrity="sha512-YKxHqn7D0M5knQJO2xKHZpCfZ+/Ta7qpEHgADN+AkY2U2Y4JJtlCEHzKWV5ZE87vZR3ipdzNJ4U/sfjIaoHMfw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnify/2.3.3/js/jquery.magnify-mobile.min.js" integrity="sha512-c3hGxeqPC+hyYCH6xddUy6sg5lgmXomxpN5fkhUxKPOM7OD/+M+Rj1rj02q4MOkn+PUBRGPZVNTMMrREyZS0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.1/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@^0.159.0/build/three.module.min.js"
+      }
+    }
+    </script>
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function(){
+            $('#objs').slick({
+                  draggable: false,
+                  autoplay: true,
+                  dots: true,
+                  infinite: true,
+                  speed: 300,
+                  slidesToShow: 5,
+                  slidesToScroll: 1,
+                  variableWidth: true
+            });
+            $('.zoom').magnify();
+        });
+    
+    </script>
+
+</body>
+</html>
